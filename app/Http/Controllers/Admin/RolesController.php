@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\RolesRequest;
+use App\Http\Resources\RoleResource;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Spatie\Permission\Models\Role;
 
 class RolesController extends Controller
 {
@@ -13,7 +16,23 @@ class RolesController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Roles/Index');
+        $roles = RoleResource::collection(Role::latest('id')->paginate(10));
+        $headers = [
+            [
+                'label' => 'Name',
+                'name' => 'name'
+            ],
+            [
+                'label' => 'Created At',
+                'name' => 'created_at'
+            ],
+            [
+                'label' => 'Actions',
+                'name' => 'actions'
+            ]
+        ];
+        
+        return Inertia::render('Roles/Index', compact('roles', 'headers'));
     }
 
     /**
@@ -21,15 +40,19 @@ class RolesController extends Controller
      */
     public function create()
     {
-        //
+        $edit = false;
+        $title = 'Add Role';
+        return Inertia::render('Roles/Create', compact('edit', 'title'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(RolesRequest $request)
     {
-        //
+        Role::create($request->validated());
+
+        return redirect()->route('admin.roles.index')->with('success', 'Role created successfully');
     }
 
     /**
@@ -43,17 +66,22 @@ class RolesController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Role $role)
     {
-        //
+        $role = new RoleResource(($role));
+        $edit = true;
+        $title = 'Edit role';
+        
+        return Inertia::render('Roles/Create', compact('role', 'edit', 'title'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(RolesRequest $request, Role $role)
     {
-        //
+        $role->update($request->validated());
+        return redirect()->route('admin.roles.index')->with('success', 'Role updated successfully');
     }
 
     /**
