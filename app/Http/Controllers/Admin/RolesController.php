@@ -47,7 +47,8 @@ class RolesController extends Controller
     {
         $edit = false;
         $title = 'Add Role';
-        return Inertia::render('Roles/Create', compact('edit', 'title'));
+        $routeResourceName = $this->routeResourceName;
+        return Inertia::render('Roles/Create', compact('edit', 'title', 'routeResourceName'));
     }
 
     /**
@@ -56,8 +57,8 @@ class RolesController extends Controller
     public function store(RolesRequest $request)
     {
         Role::create($request->validated());
-
-        return redirect()->route('admin.roles.index')->with('success', 'Role created successfully');
+        $routeResourceName = $this->routeResourceName;
+        return redirect()->route('admin.roles.index', compact('routeResourceName'))->with('success', 'Role created successfully');
     }
 
     /**
@@ -73,11 +74,11 @@ class RolesController extends Controller
      */
     public function edit(Role $role)
     {
-        $role = new RoleResource(($role));
+        $item = new RoleResource(($role));
         $edit = true;
         $title = 'Edit role';
-        
-        return Inertia::render('Roles/Create', compact('role', 'edit', 'title'));
+        $routeResourceName = $this->routeResourceName;
+        return Inertia::render('Roles/Create', compact('item', 'edit', 'title', 'routeResourceName'));
     }
 
     /**
@@ -86,7 +87,8 @@ class RolesController extends Controller
     public function update(RolesRequest $request, Role $role)
     {
         $role->update($request->validated());
-        return redirect()->route('admin.roles.index')->with('success', 'Role updated successfully');
+        $routeResourceName = $this->routeResourceName;
+        return redirect()->route('admin.roles.index', compact('routeResourceName'))->with('success', 'Role updated successfully');
     }
 
     /**
