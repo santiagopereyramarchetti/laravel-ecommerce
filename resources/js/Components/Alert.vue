@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-    import { ref, onMounted } from 'vue';
+    import { ref, onMounted, watch } from 'vue';
     import { usePage } from '@inertiajs/vue3';
 
     onMounted(() => {
@@ -14,7 +14,15 @@
         }, 5000)
     })
 
-    const message = ref(usePage().props.flash.success)
+    const message = ref("")
+
+    watch(
+        () => usePage().props.flash.success,
+        (successMessage) =>message.value = successMessage,
+        {
+            inmediate: true,
+        }
+    )
 </script>
 
 <style lang="scss" scoped>

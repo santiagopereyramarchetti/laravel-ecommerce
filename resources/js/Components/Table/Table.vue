@@ -15,6 +15,9 @@
                         <tr v-for="item in items" :key="item.id" class="border-b dark:border-neutral-500">
                             <slot :item="item"/>
                         </tr>
+                        <tr v-if="items.length == 0">
+                            <Td :colspan="headers.length"> No data available </Td>
+                        </tr>
                     </tbody>
                     </table>
                 </div>
