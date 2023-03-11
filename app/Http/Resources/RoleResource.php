@@ -19,7 +19,12 @@ class RoleResource extends JsonResource
             'name' => $this->name,
             'created_at_formated' => $this->when($this->created_at, function(){
                 return $this->created_at->toDayDatetimeString();
-            })
+            }),
+            'permissions' => PermissionResource::collection($this->whenLoaded('permissions')),
+            'can' => [
+                'edit' => $request->user()?->can('edit role'),
+                'delete' => $request->user()?->can('delete role'),
+            ]
         ];
     }
 }

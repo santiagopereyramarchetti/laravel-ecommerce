@@ -5,20 +5,28 @@
 </template>
 
 <script setup>
-    import { ref, onMounted, watch } from 'vue';
+    import { ref, watch } from 'vue';
     import { usePage } from '@inertiajs/vue3';
 
-    onMounted(() => {
-        setTimeout(() => {
-            message.value = ""
-        }, 5000)
-    })
-
     const message = ref("")
+    const timeoutHandler = ref(null)
 
     watch(
         () => usePage().props.flash.success,
-        (successMessage) =>message.value = successMessage,
+        (successMessage) =>{
+            
+            message.value = successMessage
+
+            clearTimeout(timeoutHandler.value)
+            //This is a debouncer. Clean the time of setTimeout before. start and if we click many times only going to count the last
+            //because every time we click the time going to restart
+
+            if(successMessage){
+                timeoutHandler.value = setTimeout(() => {
+                    message.value = ""
+                }, 5000)
+            }
+        },
         {
             inmediate: true,
         }

@@ -7,32 +7,14 @@
         </template>
 
         <Container>
-            <Card class="mb-4">
-                <template #header>
-                    Filters
-                </template>
-                <form action="" class="grid grid-cols-4 gap-8">
-                    <div>
-                        <InputLabel for="name" value="Name" />
-
-                        <TextInput
-                            id="name"
-                            type="name"
-                            class="mt-1 block w-full"
-                            v-model="filters.name"
-                            autofocus
-                            autocomplete="name"
-                        />
-                    </div>
-                </form>
-            </Card>
-            <PrimaryButton :href="route(`admin.${props.routeResourceName}.create`)">Create</PrimaryButton>
+            <Filter v-model="filters"/>
+            <PrimaryButton v-if="can.create" :href="route(`admin.${props.routeResourceName}.create`)">Create</PrimaryButton>
             <Card class="mt-2" :is-loading="isLoading">
                 <Table :headers="headers" :items="items.data">
                     <template v-slot="{ item }">
                         <Td> {{ item.name }} </Td>
                         <Td> {{ item.created_at_formated }} </Td>
-                        <Td> <Actions :editLink="route(`admin.${props.routeResourceName}.edit`, {id: item.id})" @deleteClicked="showDeleteModal(item)"></Actions></Td>        
+                        <Td> <Actions :show-edit="item.can.edit" :editLink="route(`admin.${props.routeResourceName}.edit`, {id: item.id})" :show-delete="item.can.delete" @deleteClicked="showDeleteModal(item)"></Actions></Td>        
                     </template>    
                 </Table>
             </Card>
@@ -63,8 +45,7 @@
     import Actions from '@/Components/Table/Actions.vue'
     import PrimaryButton from '@/Components/PrimaryButton.vue';
     import Modal from '@/Components/Admin/Modal.vue';
-    import InputLabel from '@/Components/InputLabel.vue';
-    import TextInput from '@/Components/TextInput.vue';
+    import Filter from './Filters.vue';
 
     import useDeleteItem from '@/Composables/useDeleteItem'
     import useFilters from '@/Composables/useFilters'
@@ -83,6 +64,9 @@
         title:{
             type: String,
             required: true,
+        },
+        can: {
+            type: Object
         }
     })
 

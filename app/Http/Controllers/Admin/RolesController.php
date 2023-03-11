@@ -4,16 +4,25 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\RolesRequest;
+use App\Http\Resources\PermissionResource;
 use App\Http\Resources\RoleResource;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class RolesController extends Controller
 {
     private string $routeResourceName = 'roles';
+
+    public function __construct()
+    {
+        $this->middleware('can:view roles list')->only('index');
+        $this->middleware('can:create role')->only(['create', 'store']);
+        $this->middleware('can:edit role')->only(['edit', 'update']);
+        $this->middleware('can:delete role')->only('destroy');
+    }
     /**
      * Display a listing of the resource.
      */
@@ -37,7 +46,10 @@ class RolesController extends Controller
         $filters = (object) $request->all();
         $routeResourceName = $this->routeResourceName;
         $title = 'Roles';
-        return Inertia::render('Roles/Index', compact('items', 'headers','filters', 'routeResourceName', 'title'));
+        $can = [
+            'create' => $request->user()->can('create permission'),
+        ];
+        return Inertia::render('Roles/Index', compact('items', 'headers','filters', 'routeResourceName', 'title', 'can'));
     }
 
     /**
@@ -74,11 +86,15 @@ class RolesController extends Controller
      */
     public function edit(Role $role)
     {
+
+        $role->load('permissions');
+
         $item = new RoleResource(($role));
         $edit = true;
         $title = 'Edit role';
         $routeResourceName = $this->routeResourceName;
-        return Inertia::render('Roles/Create', compact('item', 'edit', 'title', 'routeResourceName'));
+        $permissions = PermissionResource::collection(Permission::get(['id','name']));
+        return Inertia::render('Roles/Create', compact('item', 'edit', 'title', 'routeResourceName','permissions'));
     }
 
     /**

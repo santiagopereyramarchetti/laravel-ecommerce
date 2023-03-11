@@ -20,6 +20,12 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('password')
         ]);
 
+        \App\Models\User::factory()->create([
+            'name' => 'editor',
+            'email' => 'editor@editor.com',
+            'password' => bcrypt('password')
+        ]);
+
         $this->call(RoleSeeder::class);
     }
 }

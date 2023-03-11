@@ -32,6 +32,9 @@
                 </form>
             </Card>
         </Container>
+
+        <Permissions v-if="edit" class="mt-6" :role="item" :permissions="permissions" />
+
     </AuthenticatedLayout>
 </template>
 
@@ -45,6 +48,7 @@
     import InputLabel from '@/Components/InputLabel.vue';
     import TextInput from '@/Components/TextInput.vue';
     import { onMounted } from 'vue';
+    import Permissions from './Permissions.vue';
 
     const props = defineProps({
         edit: {
@@ -56,6 +60,9 @@
         routeResourceName:{
             type: String,
             required: true
+        },
+        permissions: {
+            type: Array,
         }
     })
 

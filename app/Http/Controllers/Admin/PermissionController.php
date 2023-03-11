@@ -13,6 +13,15 @@ use Spatie\Permission\Models\Permission;
 class PermissionController extends Controller
 {
     private string $routeResourceName = 'permissions';
+
+    public function __construct()
+    {
+        $this->middleware('can:view premissions list')->only('index');
+        $this->middleware('can:create premission')->only(['create', 'store']);
+        $this->middleware('can:edit premission')->only(['edit', 'update']);
+        $this->middleware('can:delete premission')->only('destroy');
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -36,7 +45,10 @@ class PermissionController extends Controller
         $filters = (object) $request->all();
         $routeResourceName = $this->routeResourceName;
         $title = 'Permissions';
-        return Inertia::render('Permissions/Index', compact('items', 'headers','filters', 'routeResourceName', 'title'));
+        $can = [
+            'create' => $request->user()->can('create permission'),
+        ];
+        return Inertia::render('Permissions/Index', compact('items', 'headers','filters', 'routeResourceName', 'title', 'can'));
     }
 
     /**

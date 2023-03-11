@@ -19,7 +19,11 @@ class PermissionResource extends JsonResource
             'name' => $this->name,
             'created_at_formated' => $this->when($this->created_at, function(){
                 return $this->created_at->toDayDatetimeString();
-            })
+            }),
+            'can' => [
+                'edit' => $request->user()?->can('edit permission'),
+                'delete' => $request->user()?->can('delete permission'),
+            ]
         ];
     }
 }
