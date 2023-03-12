@@ -7,8 +7,13 @@
         </template>
 
         <Container>
-            <Filter v-model="filters" :categories="rootCategories"/>
-            <PrimaryButton v-if="can.create" :href="route(`admin.${props.routeResourceName}.create`)">Create</PrimaryButton>
+            <AddNew>
+                <PrimaryButton v-if="can.create" :href="route(`admin.${props.routeResourceName}.create`)">Create</PrimaryButton>
+                <template #filters>
+                    <Filters class="mt-4" v-model="filters" :categories="rootCategories"/>
+                </template>
+            </AddNew>
+
             <Card class="mt-2" :is-loading="isLoading">
                 <Table :headers="headers" :items="items.data">
                     <template v-slot="{ item }">
@@ -52,7 +57,8 @@
     import Actions from '@/Components/Table/Actions.vue'
     import PrimaryButton from '@/Components/PrimaryButton.vue';
     import Modal from '@/Components/Admin/Modal.vue';
-    import Filter from './Filters.vue';
+    import AddNew from '@/Components/AddNew.vue';
+    import Filters from './Filters.vue';
 
     import useDeleteItem from '@/Composables/useDeleteItem'
     import useFilters from '@/Composables/useFilters'
