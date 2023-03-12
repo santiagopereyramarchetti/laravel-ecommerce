@@ -46,6 +46,12 @@ class RoleSeeder extends Seeder
         Permission::create(['name' => 'edit user']);
         Permission::create(['name' => 'delete user']);
 
+        Permission::create(['name' => 'view categories module']);
+        Permission::create(['name' => 'view categories list']);
+        Permission::create(['name' => 'create category']);
+        Permission::create(['name' => 'edit category']);
+        Permission::create(['name' => 'delete category']);
+
     }   
 
     private function roles(): array{

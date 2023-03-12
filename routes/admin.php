@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AttachPermisionToRoleController;
+use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DettachPermisionFromRoleController;
 use App\Http\Controllers\Admin\PermissionController;
@@ -16,6 +17,7 @@ Route::middleware(['auth'])->group(function (){
     Route::resource('roles', RolesController::class);
     Route::resource('permissions', PermissionController::class);
     Route::resource('users', UsersController::class);
+    Route::resource('categories', CategoriesController::class);
 });
 
 require __DIR__.'/auth.php';

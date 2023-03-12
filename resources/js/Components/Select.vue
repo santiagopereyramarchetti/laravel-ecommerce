@@ -18,7 +18,7 @@
     });
     defineEmits(["update:modelValue"]);
     const options = computed(() => {
-        if (props.withoutSelect) return props.items;
+        if (props.withoutSelect == false) return props.items;
         return [
             { [props.itemText]: "Select", [props.itemValue]: "" },
             ...props.items,
@@ -37,10 +37,11 @@
             @input="$emit('update:modelValue', $event.target.value)"
             ref="select"
             class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm w-full block">
-        <option v-for="item in options"
+        <option v-if="items != null" v-for="item in options"
                 :key="item[itemValue]"
                 :value="item[itemValue]">
             {{ item[itemText] }}
         </option>
+        <option v-else>No items avaiable</option>
     </select>
 </template>
