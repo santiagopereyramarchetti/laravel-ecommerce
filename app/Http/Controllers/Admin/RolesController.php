@@ -47,7 +47,7 @@ class RolesController extends Controller
         $routeResourceName = $this->routeResourceName;
         $title = 'Roles';
         $can = [
-            'create' => $request->user()->can('create permission'),
+            'create' => $request->user()->can('create role'),
         ];
         return Inertia::render('Roles/Index', compact('items', 'headers','filters', 'routeResourceName', 'title', 'can'));
     }
@@ -70,7 +70,7 @@ class RolesController extends Controller
     {
         Role::create($request->validated());
         $routeResourceName = $this->routeResourceName;
-        return redirect()->route('admin.roles.index', compact('routeResourceName'))->with('success', 'Role created successfully');
+        return redirect()->route("admin.{$this->routeResourceName}.index", compact('routeResourceName'))->with('success', 'Role created successfully');
     }
 
     /**
@@ -104,7 +104,7 @@ class RolesController extends Controller
     {
         $role->update($request->validated());
         $routeResourceName = $this->routeResourceName;
-        return redirect()->route('admin.roles.index', compact('routeResourceName'))->with('success', 'Role updated successfully');
+        return redirect()->route("admin.{$this->routeResourceName}.index", compact('routeResourceName'))->with('success', 'Role updated successfully');
     }
 
     /**

@@ -17,13 +17,13 @@ class DatabaseSeeder extends Seeder
         \App\Models\User::factory()->create([
             'name' => 'admin',
             'email' => 'admin@admin.com',
-            'password' => bcrypt('password')
+            'password' => 'password'
         ]);
 
         \App\Models\User::factory()->create([
             'name' => 'editor',
             'email' => 'editor@editor.com',
-            'password' => bcrypt('password')
+            'password' => 'password'
         ]);
 
         $this->call(RoleSeeder::class);

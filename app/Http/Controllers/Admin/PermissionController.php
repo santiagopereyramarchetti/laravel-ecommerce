@@ -69,7 +69,7 @@ class PermissionController extends Controller
     {
         Permission::create($request->validated());
         $routeResourceName = $this->routeResourceName;
-        return redirect()->route('admin.permissions.index', compact('routeResourceName'))->with('success', 'Permission created successfully');
+        return redirect()->route("admin.{$this->routeResourceName}.index", compact('routeResourceName'))->with('success', 'Permission created successfully');
     }
 
     /**
@@ -99,7 +99,7 @@ class PermissionController extends Controller
     {
         $permission->update($request->validated());
         $routeResourceName = $this->routeResourceName;
-        return redirect()->route('admin.permissions.index', compact('routeResourceName'))->with('success', 'Permission updated successfully');
+        return redirect()->route("admin.{$this->routeResourceName}.index", compact('routeResourceName'))->with('success', 'Permission updated successfully');
     }
 
     /**
