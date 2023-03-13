@@ -16,7 +16,14 @@
     import PrimaryButton from '@/Components/PrimaryButton.vue';
     import { ref } from 'vue';
 
-    const showFilters = ref(false)
+    const props = defineProps({
+        show:{
+            type: Boolean,
+            default: false,
+        }
+    })
+
+    const showFilters = ref(props.show ?? false)
 </script>
 
 <style lang="scss" scoped>
