@@ -14,7 +14,10 @@ export default (params) => {
     const isLoading = ref(false)
 
     const fetchItems = () =>{
-        router.get(route(`admin.${routeResourceName}.index`, filters.value), {}, {
+        router.get(route(`admin.${routeResourceName}.index`, {
+                ...filters.value,
+                page: 1,
+            }), {}, {
             preserveState: true,
             preserveScroll: true,
             replace: true,

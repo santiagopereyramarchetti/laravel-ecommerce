@@ -15,7 +15,7 @@
             </AddNew>
 
             <Card class="mt-2" :is-loading="isLoading">
-                <Table :headers="headers" :items="items.data">
+                <Table :headers="headers" :items="items">
                     <template v-slot="{ item }">
                         <Td> 
                             <div class="whitespace-pre-wrap w-64">

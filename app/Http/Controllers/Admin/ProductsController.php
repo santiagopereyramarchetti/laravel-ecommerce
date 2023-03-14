@@ -137,7 +137,7 @@ class ProductsController extends Controller
     public function edit(Product $product)
     {
         
-        $item = new ProductResource(($product->load('categories')));
+        $item = new ProductResource(($product->load('categories', 'media'))->paginate(10));
         $edit = true;
         $title = 'Edit product';
         $routeResourceName = $this->routeResourceName;

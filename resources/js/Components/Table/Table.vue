@@ -12,7 +12,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="item in items" :key="item.id" class="border-b dark:border-neutral-500">
+                        <tr v-for="item in items.data" :key="item.id" class="border-b dark:border-neutral-500">
                             <slot :item="item"/>
                         </tr>
                         <tr v-if="items.length == 0">
@@ -25,11 +25,16 @@
             </div>
         </div>
     </div>
+
+    <div class="py-2">
+        <Pagination :links="items.meta.links"></Pagination>
+    </div>
 </template>
 
 <script setup>
     import Th from './Th.vue';
     import Td from './Td.vue';
+    import Pagination from './Pagination.vue';
 
     defineProps({
         headers: Array,

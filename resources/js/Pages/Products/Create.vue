@@ -10,6 +10,20 @@
             <Card>
                 <form action="" @submit.prevent="submit">
                     <div class="grid grid-cols-2 gap-6">
+                        <div v-if="edit" class="col-span-2">
+                            <div v-if="item.images.length > 0">
+                                <div>Images:</div>
+                                <div class="grid grid-cols-3 gap-6">
+                                    <div v-for="image in item.images" :key="image.id" class="bg-gray-50 p-4 rounded-md relative">
+                                        <button class="absolute right-4 top-4 rounded-full p-2 transition-colors duration-200 hover:bg-red-500 hover:text-white" @click.prevent="deleteImage(image.id)">
+                                            <Trash></Trash>
+                                        </button>
+                                        <div v-html="image.html" class="[&_img]:h-64 [&_img]:w-full [&_img]:object-contain"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <ImageUpload model-type="product" :model-id="item.id"></ImageUpload>
+                        </div>
                         <InputGroup label="Name" v-model="form.name" :error-message="form.errors.name" required></InputGroup>
                         <InputGroup label="Slug" v-model="form.slug" :error-message="form.errors.slug" required></InputGroup>
                         <InputGroup label="Cost price" type="number" v-model="form.costPrice" :error-message="form.errors.costPrice" required></InputGroup>
@@ -39,7 +53,7 @@
 
 <script setup>
     import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-    import { Head, useForm } from '@inertiajs/vue3';
+    import { Head, useForm, router } from '@inertiajs/vue3';
     import Container from '@/Components/Container.vue';
     import Card from '@/Components/Card/Card.vue'
     import PrimaryButton from '@/Components/PrimaryButton.vue';
@@ -47,6 +61,8 @@
     import InputGroup from '@/Components/InputGroup.vue';
     import SelectGroup from '@/Components/SelectGroup.vue';
     import EditorGroup from '@/Components/EditorGroup.vue';
+    import ImageUpload from '@/Components/ImageUpload.vue';
+    import Trash from '@/Components/Icons/Trash.vue';
 
     import replace from 'lodash/replace'
     import kebabCase from 'lodash/kebabCase'
@@ -115,6 +131,12 @@
 
     const submit = () => {
         props.edit ? form.put(route(`admin.${props.routeResourceName}.update`, {id: props.item.id})) : form.post(route(`admin.${props.routeResourceName}.store`))
+    }
+
+    const deleteImage = (imageId) => {
+        if(!confirm("Are you shure you want to delete this image?")) return;
+
+        router.post(route('admin.images.destroy', {id: imageId}))
     }
 
 </script>
