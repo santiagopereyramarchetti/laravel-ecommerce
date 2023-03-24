@@ -43,7 +43,9 @@ class ProductResource extends JsonResource
                         'html' => $media->toHTML()
                     ]
                 )
-            )
+            ),
+            'creator_id' =>$this->whenNotNull('creator_id'),
+            'creator' => new UserResource($this->whenLoaded('creator'))
         ];
     }
 }

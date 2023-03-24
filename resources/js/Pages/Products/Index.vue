@@ -34,6 +34,7 @@
                             <YesNoLavel :active="item.active"></YesNoLavel>
                         </Td>
                         <Td> {{ item.created_at_formated }} </Td>
+                        <Td> {{ item.creator?.name }} </Td>
                         <Td> <Actions :show-edit="item.can.edit" :editLink="route(`admin.${props.routeResourceName}.edit`, {id: item.id})" :show-delete="item.can.delete" @deleteClicked="showDeleteModal(item)"></Actions></Td>        
                     </template>    
                 </Table>

@@ -20,8 +20,8 @@ class ProductsController extends Controller
     {
         $this->middleware('can:view products list')->only('index');
         $this->middleware('can:create product')->only(['create', 'store']);
-        $this->middleware('can:edit product')->only(['edit', 'update']);
-        $this->middleware('can:delete product')->only('destroy');
+        $this->middleware('can:update,product')->only(['edit', 'update']);
+        $this->middleware('can:delete,product')->only('destroy');
     }
     /**
      * Display a listing of the resource.
@@ -53,6 +53,7 @@ class ProductsController extends Controller
                 ->where('show_on_slider', $request->showOnSlider)
             )
             ->latest('id')
+            ->with('creator')
             ->paginate(10));
         $headers = [
             [
@@ -82,6 +83,10 @@ class ProductsController extends Controller
             [
                 'label' => 'Created At',
                 'name' => 'created_at'
+            ],
+            [
+                'label' => 'Creator name',
+                'name' => 'creator_id'
             ],
             [
                 'label' => 'Actions',
@@ -137,7 +142,7 @@ class ProductsController extends Controller
     public function edit(Product $product)
     {
         
-        $item = new ProductResource(($product->load('categories', 'media'))->paginate(10));
+        $item = new ProductResource(($product->load('categories', 'media')));
         $edit = true;
         $title = 'Edit product';
         $routeResourceName = $this->routeResourceName;
